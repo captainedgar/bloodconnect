@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function MapTab() {
+export default function ProfileTab() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mapa</Text>
+      <Text style={styles.title}>Perfil</Text>
       <Text style={styles.subtitle}>
-        Aquí se mostrará el mapa interactivo con bancos de sangre y hospitales.
+        Aquí se mostrará el perfil del usuario con su tipo de sangre, historial
+        de donaciones y recompensas.
       </Text>
     </View>
   );

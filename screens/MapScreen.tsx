@@ -144,10 +144,5 @@ innerRing: {
   alignItems: "center",
 },
 
-sosText: {
-  color: "#FFF",
-  fontSize: 28,
-  fontWeight: "bold",
-},
 });
 
