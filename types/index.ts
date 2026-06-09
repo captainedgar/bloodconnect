@@ -1,41 +1,45 @@
 export enum BloodType {
-  A_POSITIVE = "A+",
-  A_NEGATIVE = "A-",
-  B_POSITIVE = "B+",
-  B_NEGATIVE = "B-",
-  AB_POSITIVE = "AB+",
-  AB_NEGATIVE = "AB-",
-  O_POSITIVE = "O+",
-  O_NEGATIVE = "O-",
+  A_POSITIVE = "A_POSITIVE",
+  A_NEGATIVE = "A_NEGATIVE",
+  B_POSITIVE = "B_POSITIVE",
+  B_NEGATIVE = "B_NEGATIVE",
+  AB_POSITIVE = "AB_POSITIVE",
+  AB_NEGATIVE = "AB_NEGATIVE",
+  O_POSITIVE = "O_POSITIVE",
+  O_NEGATIVE = "O_NEGATIVE",
 }
+
+export const BLOOD_TYPE_LABELS: Record<BloodType, string> = {
+  [BloodType.A_POSITIVE]: "A+",
+  [BloodType.A_NEGATIVE]: "A-",
+  [BloodType.B_POSITIVE]: "B+",
+  [BloodType.B_NEGATIVE]: "B-",
+  [BloodType.AB_POSITIVE]: "AB+",
+  [BloodType.AB_NEGATIVE]: "AB-",
+  [BloodType.O_POSITIVE]: "O+",
+  [BloodType.O_NEGATIVE]: "O-",
+};
 
 export enum UserRole {
-  DONOR = "donor",
-  RECIPIENT = "recipient",
-  MEDICAL = "medical",
-  ADMIN = "admin",
+  DONOR = "DONOR",
+  RECIPIENT = "RECIPIENT",
+  MEDICAL = "MEDICAL",
+  ADMIN = "ADMIN",
 }
 
-export enum Sex {
-  MALE = "male",
-  FEMALE = "female",
-  OTHER = "other",
-}
+export const USER_ROLE_LABELS: Record<UserRole, string> = {
+  [UserRole.DONOR]: "Donante",
+  [UserRole.RECIPIENT]: "Receptor",
+  [UserRole.MEDICAL]: "Médico",
+  [UserRole.ADMIN]: "Administrador",
+};
 
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  phone: string;
-  birthDate: string;
-  sex: Sex;
   bloodType: BloodType;
-  weight: number;
-  city: string;
-  province: string;
   role: UserRole;
-  avatarUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -45,7 +49,27 @@ export interface AuthTokens {
   refreshToken: string;
 }
 
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  bloodType: BloodType;
+  role: UserRole;
+}
+
 export interface ApiError {
   message: string;
   statusCode: number;
+  errors?: { field: string; message: string }[];
 }
