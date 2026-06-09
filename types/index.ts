@@ -23,14 +23,16 @@ export const BLOOD_TYPE_LABELS: Record<BloodType, string> = {
 export enum UserRole {
   DONOR = "DONOR",
   RECIPIENT = "RECIPIENT",
-  MEDICAL = "MEDICAL",
+  HOSPITAL = "HOSPITAL",
+  BLOOD_BANK = "BLOOD_BANK",
   ADMIN = "ADMIN",
 }
 
 export const USER_ROLE_LABELS: Record<UserRole, string> = {
   [UserRole.DONOR]: "Donante",
   [UserRole.RECIPIENT]: "Receptor",
-  [UserRole.MEDICAL]: "Médico",
+  [UserRole.HOSPITAL]: "Hospital",
+  [UserRole.BLOOD_BANK]: "Banco de Sangre",
   [UserRole.ADMIN]: "Administrador",
 };
 
@@ -72,4 +74,54 @@ export interface ApiError {
   message: string;
   statusCode: number;
   errors?: { field: string; message: string }[];
+}
+
+export interface Hospital {
+  id: string;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  phone: string | null;
+  email: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BloodBank {
+  id: string;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  phone: string | null;
+  email: string | null;
+  hospitalId: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BloodInventory {
+  id: string;
+  bloodBankId: string;
+  bloodType: BloodType;
+  units: number;
+  updatedAt: string;
+}
+
+export interface BloodBankWithInventory extends BloodBank {
+  inventory: BloodInventory[];
+}
+
+export interface NearbyBloodBank extends BloodBankWithInventory {
+  distance: number;
+}
+
+export interface NearbyQuery {
+  latitude: number;
+  longitude: number;
+  radius?: number;
+  bloodType?: BloodType;
 }

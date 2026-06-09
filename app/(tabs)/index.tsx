@@ -1,31 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Platform } from "react-native";
+import WebMap from "@/components/map/WebMap";
 
 export default function MapTab() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Mapa</Text>
-      <Text style={styles.subtitle}>
-        Aquí se mostrará el mapa interactivo con bancos de sangre y hospitales.
-      </Text>
-    </View>
-  );
-}
+  if (Platform.OS === "web") {
+    return <WebMap />;
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    opacity: 0.6,
-  },
-});
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const MobileMap = require("@/components/map/MobileMap").default;
+  return <MobileMap />;
+}

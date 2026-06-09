@@ -3,11 +3,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, LogBox, Platform, View } from "react-native";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useAuthStore } from "@/store/auth-store";
+
+if (Platform.OS === "web") {
+  LogBox.ignoreAllLogs(true);
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {

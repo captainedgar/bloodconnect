@@ -11,14 +11,16 @@
 | Fase | Nombre | Duración | Estado |
 |------|--------|----------|--------|
 | 0 | Documentación y Diseño | 1 semana | ✅ Completada |
-| 1 | Setup y Estructura | 1 semana | 🔄 En progreso |
-| 2 | Autenticación | 2 semanas | ⏳ Pendiente |
-| 3 | Mapa Interactivo | 2 semanas | ⏳ Pendiente |
-| 4 | Solicitudes de Sangre | 2 semanas | ⏳ Pendiente |
-| 5 | Inventario | 1 semana | ⏳ Pendiente |
-| 6 | Notificaciones Push | 1 semana | ⏳ Pendiente |
-| 7 | Historial y Recompensas | 1 semana | ⏳ Pendiente |
-| 8 | Testing y Lanzamiento | 2 semanas | ⏳ Pendiente |
+| 1 | Setup y Estructura | 1 semana | ✅ Completada |
+| 2 | Autenticación + Modelo de Datos | 2 semanas | ✅ Completada |
+| 3 | API + Mapa Interactivo | 2 semanas | 🔄 En progreso |
+| 4 | Solicitudes de Sangre (SOS) | 2 semanas | ⏳ Pendiente |
+| 5 | Inventario de Bancos | 1 semana | ⏳ Pendiente |
+| 6 | Citas y Donaciones | 1 semana | ⏳ Pendiente |
+| 7 | Notificaciones Push + Tiempo Real | 1 semana | ⏳ Pendiente |
+| 8 | Historial, Recompensas y Perfil | 1 semana | ⏳ Pendiente |
+| 9 | Dashboards por Rol | 2 semanas | ⏳ Pendiente |
+| 10 | Testing, Optimización y Deploy | 2 semanas | ⏳ Pendiente |
 
 ---
 

@@ -19,7 +19,7 @@ const registerSchema = z.object({
     "O_POSITIVE",
     "O_NEGATIVE",
   ]),
-  role: z.enum(["DONOR", "RECIPIENT", "MEDICAL", "ADMIN"]).default("DONOR"),
+  role: z.enum(["DONOR", "RECIPIENT", "HOSPITAL", "BLOOD_BANK", "ADMIN"]).default("DONOR"),
 });
 
 const loginSchema = z.object({

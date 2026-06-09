@@ -67,22 +67,27 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   loadSession: async () => {
     try {
+      console.log("[Auth] Loading session...");
       const accessToken = await getAccessToken();
       const refreshToken = await getRefreshToken();
 
       if (!accessToken || !refreshToken) {
+        console.log("[Auth] No tokens found, marking as initialized");
         set({ isInitialized: true });
         return;
       }
 
+      console.log("[Auth] Tokens found, fetching user...");
       const user = await getMeApi();
+      console.log("[Auth] User loaded:", user.email);
       set({
         user,
         tokens: { accessToken, refreshToken },
         isAuthenticated: true,
         isInitialized: true,
       });
-    } catch {
+    } catch (error) {
+      console.log("[Auth] Session load failed:", error);
       await clearTokens();
       set({ isInitialized: true });
     }

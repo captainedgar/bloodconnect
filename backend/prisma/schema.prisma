@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
 enum BloodType {
   A_POSITIVE
   A_NEGATIVE
@@ -21,9 +23,42 @@ enum BloodType {
 enum UserRole {
   DONOR
   RECIPIENT
-  MEDICAL
+  HOSPITAL
+  BLOOD_BANK
   ADMIN
 }
+
+enum Urgency {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum RequestStatus {
+  OPEN
+  IN_PROGRESS
+  FULFILLED
+  CANCELLED
+  EXPIRED
+}
+
+enum DonationStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  VERIFIED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
 
 model User {
   id        String    @id @default(uuid())
@@ -35,5 +70,119 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  requests     BloodRequest[]
+  donations    Donation[]
+  appointments Appointment[]
+
   @@map("users")
+}
+
+model Hospital {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+  phone     String?
+  email     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bloodBanks   BloodBank[]
+  bloodRequests BloodRequest[]
+
+  @@map("hospitals")
+}
+
+model BloodBank {
+  id         String   @id @default(uuid())
+  name       String
+  address    String
+  latitude   Float
+  longitude  Float
+  phone      String?
+  email      String?
+  hospitalId String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  hospital    Hospital?        @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
+  inventory   BloodInventory[]
+  donations   Donation[]
+  appointments Appointment[]
+
+  @@map("blood_banks")
+}
+
+model BloodInventory {
+  id          String    @id @default(uuid())
+  bloodBankId String
+  bloodType   BloodType
+  units       Int       @default(0)
+  updatedAt   DateTime  @updatedAt
+
+  bloodBank BloodBank @relation(fields: [bloodBankId], references: [id], onDelete: Cascade)
+
+  @@unique([bloodBankId, bloodType])
+  @@map("blood_inventory")
+}
+
+model BloodRequest {
+  id          String        @id @default(uuid())
+  requesterId String
+  hospitalId  String?
+  bloodType   BloodType
+  unitsNeeded Int
+  urgency     Urgency       @default(MEDIUM)
+  status      RequestStatus @default(OPEN)
+  description String?
+  latitude    Float
+  longitude   Float
+  expiresAt   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  requester User       @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  hospital  Hospital?  @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
+  donations Donation[]
+
+  @@map("blood_requests")
+}
+
+model Donation {
+  id           String         @id @default(uuid())
+  donorId      String
+  bloodBankId  String?
+  requestId    String?
+  bloodType    BloodType
+  units        Int            @default(1)
+  status       DonationStatus @default(SCHEDULED)
+  donationDate DateTime?
+  notes        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  donor     User          @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  bloodBank BloodBank?    @relation(fields: [bloodBankId], references: [id], onDelete: SetNull)
+  request   BloodRequest? @relation(fields: [requestId], references: [id], onDelete: SetNull)
+
+  @@map("donations")
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  donorId     String
+  bloodBankId String
+  scheduledAt DateTime
+  status      AppointmentStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  donor     User      @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  bloodBank BloodBank @relation(fields: [bloodBankId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
 }
