@@ -1,8 +1,8 @@
 # BloodConnect - Contexto Completo del Proyecto
 
 **Fecha:** Junio 2026  
-**Estado:** Fase 3 en progreso (API + Mapa Interactivo)  
-**Última actualización:** Build de Android en progreso con react-native-screens actualizado
+**Estado:** Fase 3 completada + Rediseño UI completado - Iniciando Fase 4 (Sistema SOS)  
+**Última actualización:** Rediseño completo de interfaz con nueva paleta, componentes UI y 4 pantallas principales
 
 ---
 
@@ -102,7 +102,7 @@ BloodConnect es una plataforma móvil (iOS/Android) que conecta donantes de sang
 - Perfil básico funcional
 - Logout funcional
 
-### 🔄 Fase 3: API + Mapa Interactivo (En Progreso)
+### 🔄 Fase 3: API + Mapa Interactivo (Completada)
 **Backend (Completado):**
 - Endpoints CRUD para Hospitales
 - Endpoints CRUD para BloodBanks
@@ -125,10 +125,70 @@ BloodConnect es una plataforma móvil (iOS/Android) que conecta donantes de sang
 - Indicadores de color por stock (verde/amarillo/rojo)
 - Typecheck y lint pasan sin errores
 
-**Build de Android (En Progreso):**
+**Build de Android (Completado):**
 - Actualizado react-native-screens a 4.25.2
 - Build en progreso con New Architecture habilitada
 - Variables de entorno configuradas (JAVA_HOME, ANDROID_HOME)
+
+### ✅ Fase 3.5: Rediseño de UI/UX (Completada)
+**Nuevo Sistema de Diseño:**
+- Paleta de colores actualizada:
+  - Primario: Rojo vibrante (#E52B2B) para acciones y urgencia
+  - Modo claro: Fondo blanco (#FFFFFF) con sombras suaves
+  - Modo oscuro SOS: Azul marino profundo (#081026) para emergencias
+  - Indicadores: Verde (#27AE60), Amarillo (#F2994A), Rojo (#EB5757)
+- Sistema de espaciado basado en grid de 8px (xs, sm, md, lg, xl, xxl)
+- Border radius consistente (8px, 12px, 16px, 24px, full)
+- Sombras sutiles para profundidad (sm, md, lg)
+- Tipografía: Inter/Poppins con pesos bien definidos
+
+**Componentes UI Reutilizables (components/ui/):**
+- `button.tsx` - Botones con variantes (primary, secondary, outline, ghost) y tamaños (sm, md, lg)
+- `card.tsx` - Tarjetas con sombras y modo oscuro
+- `badge.tsx` - Badges de estado (success, warning, danger, info)
+- `progress-bar.tsx` - Barras de progreso con colores automáticos
+- `search-bar.tsx` - Barra de búsqueda con botón de filtro
+- `blood-drop-icon.tsx` - Icono de gota de sangre con estados
+- `index.ts` - Exports centralizados
+
+**Nueva Navegación:**
+- Bottom navigation con 4 tabs: Home, Map, SOS, Profile
+- Barra de navegación azul oscuro (#081026)
+- Iconos minimalistas con estado activo en rojo
+- Tab SOS con icono destacado en círculo rojo
+
+**Pantallas Rediseñadas:**
+
+1. **Home (app/(tabs)/home.tsx):**
+   - Logo BloodConnect con eslogan "Every Drop Makes a Difference"
+   - Selector de tipo de sangre en grid 2x4 con estados visuales
+   - Banner de perfil con invitación a completar
+   - Stats cards: Donaciones del mes, Donantes activos
+   - CTA principal: "Ready to Save Lives"
+
+2. **Map (app/(tabs)/map.tsx):**
+   - Barra de búsqueda superior con botón de filtro
+   - Filtros rápidos horizontales por tipo de sangre
+   - Placeholder de mapa con pines de preview
+   - Leyenda de colores (Low Stock / Good Stock)
+   - Lista de bancos cercanos con estado de stock
+
+3. **SOS (app/(tabs)/sos.tsx):**
+   - Modo oscuro completo (#081026)
+   - Botón de pánico central con efecto pulsante (animación)
+   - Contador de donantes respondiendo con avatares superpuestos
+   - Lista de solicitudes urgentes con:
+     - Icono de gota con tipo de sangre
+     - Nombre del hospital y tiempo transcurrido
+     - Unidades necesarias y badge "Urgent"
+     - Distancia al banco
+
+4. **Bank Details (app/bank-details.tsx):**
+   - Cabecera con botón de retroceso y favoritos
+   - Tarjeta del hospital con imagen placeholder
+   - Inventario en tiempo real con barras de progreso
+   - Cada tipo de sangre muestra: gota de color, tipo, barra, unidades, estado
+   - Botones de acción: "Get Directions" y "Call Hospital"
 
 ---
 
@@ -260,41 +320,144 @@ npm run db:studio            # Abrir Prisma Studio
 
 ## 7. Roadmap Completo
 
-### Fase 3: API + Mapa Interactivo (En Progreso)
-**Backend:** ✅ Completado
-**Frontend:** ✅ Completado
-**Build Android:** 🔄 En progreso
+### ✅ Fase 0: Documentación y Diseño (Completada)
+### ✅ Fase 1: Setup y Estructura (Completada)
+### ✅ Fase 2: Autenticación + Modelo de Datos (Completada)
+### ✅ Fase 3: API + Mapa Interactivo (Completada)
+### ✅ Fase 3.5: Rediseño de UI/UX (Completada)
 
-### Fase 4: Solicitudes de Sangre (SOS)
-- Backend: CRUD Solicitudes, filtro por compatibilidad, estados
-- Frontend: Botón SOS, formulario de solicitud, lista de solicitudes compatibles, responder a solicitud
+### 🔄 Fase 4: Sistema SOS Completo (PRÓXIMA - En Progreso)
+**Backend (Pendiente):**
+- Modelo `BloodRequest` con estados: PENDING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
+- Modelo `RequestResponse` para tracking de donantes que responden
+- Endpoint `POST /requests/sos` - Crear solicitud de emergencia
+- Endpoint `GET /requests/urgent` - Listar solicitudes urgentes cercanas (filtro por radio)
+- Endpoint `POST /requests/:id/respond` - Donante acepta responder
+- Endpoint `GET /requests/:id/responders` - Listar donantes respondiendo
+- Endpoint `PATCH /requests/:id/status` - Actualizar estado de solicitud
+- Validación de compatibilidad sanguínea automática
+- Cálculo de distancia con Haversine
 
-### Fase 5: Inventario de Bancos
-- Backend: Actualizar stock, calcular niveles, alertas automáticas
-- Frontend: Vista de inventario para bancos, indicadores de color
+**Frontend (Completado - UI lista, falta integración):**
+- Pantalla SOS con botón pulsante y animación
+- Lista de solicitudes urgentes con datos mock
+- Contador de donantes respondiendo
+- Falta: Conectar con API real, WebSocket para actualizaciones en tiempo real
 
-### Fase 6: Citas y Donaciones
+### 🔜 Fase 5: Estadísticas y Dashboard (Pendiente)
+**Backend:**
+- Endpoint `GET /stats/dashboard` - Estadísticas generales
+  - Donaciones del mes
+  - Donantes activos
+  - Bancos registrados
+  - Solicitudes completadas
+- Agregar campos al modelo User: `phone`, `address`, `dateOfBirth`, `profileImage`
+- Endpoint `PATCH /users/profile` - Actualizar perfil extendido
+
+**Frontend:**
+- Conectar stats cards de Home con API real
+- Formulario de perfil extendido
+- Validación de campos opcionales
+
+### 🔜 Fase 6: Notificaciones y Favoritos (Pendiente)
+**Backend:**
+- Modelo `Notification` con tipos: SOS_ALERT, REQUEST_UPDATE, DONATION_REMINDER
+- Modelo `Favorite` para bancos favoritos
+- Endpoints de notificaciones:
+  - `GET /notifications` - Listar notificaciones del usuario
+  - `GET /notifications/unread-count` - Contador de no leídas
+  - `PATCH /notifications/:id/read` - Marcar como leída
+  - `PATCH /notifications/read-all` - Marcar todas como leídas
+- Endpoints de favoritos:
+  - `POST /favorites/:bankId` - Agregar banco a favoritos
+  - `DELETE /favorites/:bankId` - Quitar de favoritos
+  - `GET /favorites` - Listar favoritos del usuario
+- Integración con Expo Push Notifications
+
+**Frontend:**
+- Badge de notificaciones en SOS (UI lista, falta integración)
+- Botón de favoritos en Bank Details (UI lista, falta integración)
+- Pantalla de lista de notificaciones
+- Pantalla de bancos favoritos
+- Permisos de notificaciones push
+
+### 🔜 Fase 7: Inventario Avanzado (Pendiente)
+- Backend: Alertas automáticas de stock bajo, predicción de demanda
+- Frontend: Dashboard de inventario para bancos de sangre
+- Gráficos de tendencias de inventario
+
+### 🔜 Fase 8: Citas y Donaciones (Pendiente)
 - Backend: CRUD Citas, CRUD Donaciones, registro y verificación
 - Frontend: Agendar cita, historial de donaciones, flujo de donación
+- Sistema de recordatorios
 
-### Fase 7: Notificaciones Push + Tiempo Real
-- Backend: Expo Push Notifications, WebSocket (Socket.io)
-- Frontend: Permisos, listeners, navegación desde notificación
+### 🔜 Fase 9: Gamificación y Recompensas (Pendiente)
+- Backend: Sistema de insignias, niveles de donante, puntos
+- Frontend: Historial con gráficos, insignias, progreso de nivel
+- Logros desbloqueables (primera donación, 5 donaciones, etc.)
 
-### Fase 8: Historial, Recompensas y Perfil Completo
-- Backend: Estadísticas, insignias, niveles de donante
-- Frontend: Historial con gráficos, insignias, progreso de nivel, perfil editable
-
-### Fase 9: Dashboards por Rol
+### 🔜 Fase 10: Dashboards por Rol - Móvil (Pendiente)
 - Dashboard de banco (inventario, donaciones, citas)
 - Dashboard de hospital (solicitudes, respuestas, métricas)
 - Dashboard de administrador (usuarios, hospitales, bancos, métricas globales)
 
-### Fase 10: Testing, Optimización y Deploy
-- Tests funcionales, rendimiento, seguridad
+### 🔜 Fase 11: Tiempo Real con WebSocket (Pendiente)
+- Backend: Socket.io para actualizaciones en tiempo real
+- Frontend: Listeners para solicitudes SOS, respuestas, cambios de inventario
+- Indicadores de "en línea" y "escribiendo"
+
+### 🔜 Fase 12: Versión Web - Sección Pública (Pendiente)
+**Objetivo:** Landing pública accesible desde navegador sin necesidad de instalar la app.
+
+**Páginas públicas:**
+- Landing page con información de BloodConnect y CTA para descargar la app
+- Mapa web interactivo (OpenStreetMap/Leaflet) para buscar bancos de sangre cercanos
+- Vista de detalles de banco (inventario público, ubicación, horarios)
+- Información sobre tipos de sangre y compatibilidad
+- Blog/recursos sobre donación de sangre
+
+**Tecnología:**
+- React Native Web (ya configurada en el proyecto)
+- Leaflet o Mapbox GL JS para mapas web (reemplazar iframe actual)
+- SEO optimizado para buscadores
+
+### 🔜 Fase 13: Versión Web - Dashboard Administrativo (Pendiente)
+**Objetivo:** Panel de gestión web para bancos de sangre, hospitales y administradores.
+
+**Dashboard de Banco de Sangre:**
+- Gestión de inventario en tiempo real (CRUD completo)
+- Vista de solicitudes SOS recibidas y estado de respuestas
+- Gestión de citas programadas
+- Métricas: donaciones por período, tipos más solicitados, tendencias
+- Exportación de reportes (PDF/Excel)
+
+**Dashboard de Hospital:**
+- Crear y gestionar solicitudes de sangre (SOS)
+- Ver donantes que respondieron a sus solicitudes
+- Historial de solicitudes y donaciones recibidas
+- Métricas de tiempo de respuesta
+
+**Dashboard de Administrador:**
+- Gestión de usuarios (ver, bloquear, cambiar roles)
+- Gestión de hospitales y bancos de sangre (CRUD)
+- Métricas globales del sistema
+- Logs de actividad
+- Configuración del sistema
+
+**Tecnología:**
+- React Native Web + componentes web-specific
+- Gráficos: Victory Native o react-chartjs-2
+- Tablas: TanStack Table para datos complejos
+- Autenticación con roles (middleware requireRole ya existe)
+
+### 🔜 Fase 14: Testing, Optimización y Deploy (Pendiente)
+- Tests unitarios, integración y E2E
+- Optimización de rendimiento y bundle size
 - EAS Build para iOS/Android
 - Deploy backend (Railway/Render)
+- Deploy web (Vercel/Netlify)
 - Submit a App Store y Google Play
+- Monitoreo y analytics
 
 ---
 
@@ -304,26 +467,37 @@ npm run db:studio            # Abrir Prisma Studio
 bloodconnect/
 ├── app/
 │   ├── _layout.tsx              # Root layout con auth guard
+│   ├── bank-details.tsx         # Detalles del banco de sangre (nuevo)
 │   ├── (auth)/
 │   │   ├── _layout.tsx
 │   │   ├── login.tsx            # Pantalla de login
 │   │   └── register.tsx         # Pantalla de registro
 │   ├── (tabs)/
-│   │   ├── _layout.tsx
-│   │   ├── index.tsx            # Mapa interactivo
+│   │   ├── _layout.tsx          # Tab navigation con 4 tabs (actualizado)
+│   │   ├── index.tsx            # Redirige a Home
+│   │   ├── home.tsx             # Pantalla Home/Onboarding (nuevo)
+│   │   ├── map.tsx              # Mapa y búsqueda de bancos (nuevo)
+│   │   ├── sos.tsx              # SOS de emergencia modo oscuro (nuevo)
 │   │   ├── profile.tsx          # Perfil de usuario
-│   │   └── requests.tsx         # Solicitudes (placeholder)
+│   │   └── requests.tsx         # Solicitudes (placeholder - oculto)
 │   └── modal.tsx
 ├── components/
 │   ├── map/
 │   │   ├── MobileMap.tsx        # Mapa nativo (react-native-maps)
 │   │   └── WebMap.tsx           # Mapa web (iframe OpenStreetMap)
+│   ├── ui/                      # Componentes UI reutilizables (nuevo)
+│   │   ├── index.ts             # Exports centralizados
+│   │   ├── button.tsx           # Botones con variantes
+│   │   ├── card.tsx             # Tarjetas con sombras
+│   │   ├── badge.tsx            # Badges de estado
+│   │   ├── progress-bar.tsx     # Barras de progreso
+│   │   ├── search-bar.tsx       # Barra de búsqueda
+│   │   └── blood-drop-icon.tsx  # Icono de gota de sangre
 │   ├── haptic-tab.tsx
 │   ├── themed-text.tsx
-│   ├── themed-view.tsx
-│   └── ui/
+│   └── themed-view.tsx
 ├── constants/
-│   └── theme.ts
+│   └── theme.ts                 # Paleta de colores actualizada (nuevo)
 ├── hooks/
 │   ├── use-location.ts          # Hook para ubicación GPS
 │   ├── use-blood-banks.ts       # Hooks para bancos de sangre
@@ -425,6 +599,29 @@ bloodconnect/
 - `GET /inventory/:bloodBankId` - Inventario de un banco
 - `PATCH /inventory/:bloodBankId/:bloodType` - Actualizar stock (ADMIN, BLOOD_BANK)
 
+### Endpoints Pendientes (Fase 4 - SOS)
+- `POST /requests/sos` - Crear solicitud de emergencia
+- `GET /requests/urgent` - Listar solicitudes urgentes cercanas (query: latitude, longitude, radius, bloodType)
+- `GET /requests/:id` - Obtener solicitud por ID
+- `POST /requests/:id/respond` - Donante acepta responder a solicitud
+- `GET /requests/:id/responders` - Listar donantes que respondieron
+- `PATCH /requests/:id/status` - Actualizar estado de solicitud
+- `GET /requests/my-requests` - Mis solicitudes creadas
+- `GET /requests/my-responses` - Solicitudes a las que respondí
+
+### Endpoints Pendientes (Fase 5 - Estadísticas)
+- `GET /stats/dashboard` - Estadísticas generales (donaciones del mes, donantes activos, etc.)
+- `PATCH /users/profile` - Actualizar perfil extendido (phone, address, dateOfBirth, profileImage)
+
+### Endpoints Pendientes (Fase 6 - Notificaciones y Favoritos)
+- `GET /notifications` - Listar notificaciones del usuario
+- `GET /notifications/unread-count` - Contador de notificaciones no leídas
+- `PATCH /notifications/:id/read` - Marcar notificación como leída
+- `PATCH /notifications/read-all` - Marcar todas como leídas
+- `POST /favorites/:bankId` - Agregar banco a favoritos
+- `DELETE /favorites/:bankId` - Quitar banco de favoritos
+- `GET /favorites` - Listar bancos favoritos del usuario
+
 ---
 
 ## 10. Decisiones Arquitectónicas Clave
@@ -437,16 +634,41 @@ bloodconnect/
 6. **Base de datos serverless:** Neon PostgreSQL para evitar mantener servidor local
 7. **Tokens en SecureStore:** Para persistencia segura de sesión
 8. **Interceptor de Axios:** Para refresh automático de tokens en 401
+9. **Sistema de diseño modular:** Componentes UI reutilizables con variantes y tamaños
+10. **Modo oscuro contextual:** Solo la pantalla SOS usa modo oscuro para crear contraste de urgencia
+11. **Animaciones nativas:** Uso de Animated API para efectos de pulso en botón SOS
+12. **Navegación de 4 tabs:** Home, Map, SOS, Profile para flujo intuitivo de usuario
+13. **Estrategia web dual:** La versión web tendrá dos propósitos:
+    - **Sección pública:** Landing + mapa para visitantes sin necesidad de app
+    - **Dashboard administrativo:** Panel de gestión para bancos, hospitales y admins
+    - Esto permite maximizar el alcance (SEO + accesibilidad) mientras se mantiene la app móvil como experiencia principal para donantes
 
 ---
 
 ## 11. Próximos Pasos Inmediatos
 
-1. **Completar build de Android** con react-native-screens actualizado
-2. **Verificar que el mapa funcione** en el emulador con Google Maps API key
-3. **Iniciar Fase 4: Solicitudes de Sangre (SOS)**
-   - Backend: CRUD de BloodRequest con estados y filtros
-   - Frontend: Botón SOS, formulario, lista de solicitudes compatibles
+1. **Fase 4: Sistema SOS Completo**
+   - Backend: Crear modelos BloodRequest y RequestResponse en Prisma
+   - Backend: Implementar endpoints CRUD de solicitudes SOS
+   - Backend: Agregar validación de compatibilidad sanguínea
+   - Frontend: Crear servicio API para solicitudes (request-service.ts)
+   - Frontend: Crear hook useBloodRequests
+   - Frontend: Conectar pantalla SOS con API real
+   - Frontend: Reemplazar datos mock con datos reales
+
+2. **Fase 5: Estadísticas y Dashboard**
+   - Backend: Crear endpoint de estadísticas agregadas
+   - Backend: Agregar campos opcionales al modelo User
+   - Frontend: Conectar stats cards de Home con API
+   - Frontend: Crear formulario de perfil extendido
+
+3. **Fase 6: Notificaciones y Favoritos**
+   - Backend: Crear modelos Notification y Favorite
+   - Backend: Implementar endpoints de notificaciones y favoritos
+   - Backend: Integrar Expo Push Notifications
+   - Frontend: Conectar badge de notificaciones
+   - Frontend: Conectar botón de favoritos
+   - Frontend: Crear pantallas de notificaciones y favoritos
 
 ---
 
@@ -468,6 +690,63 @@ Rol: Donante
 - **Para build de Android, configurar JAVA_HOME y ANDROID_HOME en cada sesión de PowerShell**
 - **Neon puede pausar la base de datos** si está inactiva, verificar en console.neon.tech
 - **El firewall del trabajo puede bloquear** conexiones a dispositivos móviles
-- ** react-native-maps NO funciona en web**, usar WebMap con iframe
+- **react-native-maps NO funciona en web**, usar WebMap con iframe
 - **New Architecture NO se puede desactivar** porque react-native-worklets la requiere
 - **Código en inglés, UI strings en español**
+- **Componentes UI son reutilizables** - usar siempre los de components/ui/ en lugar de crear nuevos
+- **La paleta de colores está centralizada** en constants/theme.ts - no usar colores hardcoded
+- **El sistema de espaciado es de 8px** - usar Spacing.xs (4), sm (8), md (16), lg (24), xl (32), xxl (48)
+
+---
+
+## 14. Sistema de Diseño UI
+
+### Paleta de Colores
+```typescript
+// Colores principales
+primary: '#E52B2B'        // Rojo vibrante - acciones y urgencia
+primaryDark: '#C41E1E'    // Rojo oscuro - hover/pressed
+primaryLight: '#FF5252'   // Rojo claro - acentos
+
+// Colores de estado
+success: '#27AE60'        // Verde - stock bueno
+warning: '#F2994A'        // Naranja - stock bajo
+danger: '#EB5757'         // Rojo - stock crítico
+
+// Modo oscuro SOS
+sosBackground: '#081026'  // Azul marino profundo
+sosSurface: '#1A2342'     // Azul marino claro para tarjetas
+```
+
+### Componentes UI Disponibles
+- **Button**: variant (primary|secondary|outline|ghost), size (sm|md|lg), fullWidth, loading, icon
+- **Card**: elevated, dark (para modo SOS)
+- **Badge**: variant (success|warning|danger|info|default), size (sm|md)
+- **ProgressBar**: value, maxValue, color automático según porcentaje
+- **SearchBar**: value, onChangeText, placeholder, onFilterPress
+- **BloodDropIcon**: label, size (sm|md|lg), color, selected
+
+### Niveles de Stock y Colores
+- **Good Stock** (≥20 unidades): Verde (#27AE60)
+- **Low Stock** (10-19 unidades): Naranja (#F2994A)
+- **Critical** (<10 unidades): Rojo (#EB5757)
+
+### Espaciado (Grid de 8px)
+- xs: 4px
+- sm: 8px
+- md: 16px
+- lg: 24px
+- xl: 32px
+- xxl: 48px
+
+### Border Radius
+- sm: 8px (botones pequeños, badges)
+- md: 12px (cards pequeñas)
+- lg: 16px (cards principales)
+- xl: 24px (bottom sheets, modales)
+- full: 9999px (botones redondeados, avatares)
+
+### Sombras
+- sm: Elevación sutil (search bars, chips)
+- md: Elevación media (cards, botones principales)
+- lg: Elevación alta (bottom sheets, modales)

@@ -1,12 +1,5 @@
-import { Platform } from "react-native";
-import WebMap from "@/components/map/WebMap";
+import HomeScreen from "./home";
 
-export default function MapTab() {
-  if (Platform.OS === "web") {
-    return <WebMap />;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const MobileMap = require("@/components/map/MobileMap").default;
-  return <MobileMap />;
+export default function Index() {
+  return <HomeScreen />;
 }

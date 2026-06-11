@@ -1,49 +1,98 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
+import { View, StyleSheet } from "react-native";
 import { HapticTab } from "@/components/haptic-tab";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Colors, Spacing, FontSizes } from "@/constants/theme";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const tint = Colors[colorScheme ?? "light"].tint;
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: tint,
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveTintColor: Colors.light.tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabLabel,
+        tabBarIconStyle: styles.tabIcon,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Mapa",
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="map"
+        options={{
+          title: "Map",
+          href: "/(tabs)/map",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="map" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="requests"
+        name="sos"
         options={{
-          title: "Solicitudes",
+          title: "SOS",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="clipboard" size={size} color={color} />
+            <View style={styles.sosIcon}>
+              <Ionicons name="warning" size={size} color={color} />
+            </View>
           ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Perfil",
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
+      <Tabs.Screen
+        name="home"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="requests"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: Colors.sosBackground,
+    borderTopWidth: 0,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.sm,
+    height: 64,
+  },
+  tabLabel: {
+    fontSize: FontSizes.xs,
+    fontWeight: "500",
+  },
+  tabIcon: {
+    marginBottom: Spacing.xs,
+  },
+  sosIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(229, 43, 43, 0.15)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

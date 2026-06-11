@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { useLocation } from "@/hooks/use-location";
 import { useNearbyBloodBanks } from "@/hooks/use-blood-banks";
 import { BLOOD_TYPE_LABELS, BloodType } from "@/types";
@@ -98,7 +98,6 @@ export default function MobileMap() {
       {location && (
         <MapView
           style={styles.map}
-          provider={PROVIDER_GOOGLE}
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
