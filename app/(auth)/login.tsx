@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/store/auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
@@ -13,7 +14,6 @@ import {
   View,
 } from "react-native";
 import { z } from "zod";
-import { useAuthStore } from "@/store/auth-store";
 
 const loginSchema = z.object({
   email: z.string().email("Ingresa un email válido"),
@@ -96,7 +96,7 @@ export default function LoginScreen() {
                   placeholderTextColor="#999"
                   secureTextEntry
                   autoCapitalize="none"
-                  autoComplete="password"
+                  autoComplete="current-password"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
