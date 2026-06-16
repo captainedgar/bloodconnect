@@ -1,7 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
-import { HapticTab } from "@/components/haptic-tab";
 import { Colors, Spacing, FontSizes } from "@/constants/theme";
 
 export default function TabLayout() {
@@ -11,7 +10,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.light.tabIconDefault,
         headerShown: false,
-        tabBarButton: HapticTab,
         tabBarStyle: styles.tabBar,
         tabBarLabelStyle: styles.tabLabel,
         tabBarIconStyle: styles.tabIcon,
